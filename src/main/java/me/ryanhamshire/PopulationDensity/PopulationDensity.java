@@ -105,14 +105,10 @@ public class PopulationDensity extends JavaPlugin
 	public boolean preciseWorldSpawn;
 	public int woodMinimum;
     public int resourceMinimum;
-    public Integer postTopperId = 89;
-    public Integer postTopperData = 0;
-    public Integer postId = 89;
-    public Integer postData = 0;
-    public Integer outerPlatformId = 98;
-    public Integer outerPlatformData = 0;
-    public Integer innerPlatformId = 98;
-    public Integer innerPlatformData = 0;
+    public Material postTopperId = Material.GLOWSTONE;
+    public Material postId = Material.GLOWSTONE;
+    public Material outerPlatformId = Material.STONE_BRICKS;
+    public Material innerPlatformId = Material.STONE_BRICKS;
     public int nearbyMonsterSpawnLimit;
     public int maxRegionNameLength = 10;
     public boolean abandonedFarmAnimalsDie;
@@ -214,10 +210,10 @@ public class PopulationDensity extends JavaPlugin
 		this.config_bootIdlePlayersWhenLagging = config.getBoolean("PopulationDensity.Boot Idle Players When Lagging", true);
 		this.config_captureSpigotTimingsWhenLagging = config.getBoolean("PopulationDensity.Capture Spigot Timings When Lagging", true);
 		
-		String topper = config.getString("PopulationDensity.PostDesign.TopBlock", "89:0");  //default glowstone
-		String post = config.getString("PopulationDensity.PostDesign.PostBlocks", "89:0");
-		String outerPlat = config.getString("PopulationDensity.PostDesign.PlatformOuterRing", "98:0");  //default stone brick
-		String innerPlat = config.getString("PopulationDensity.PostDesign.PlatformInnerRing", "98:0");
+		String topper = config.getString("PopulationDensity.PostDesign.TopBlock", Material.GLOWSTONE.toString());  //default glowstone
+		String post = config.getString("PopulationDensity.PostDesign.PostBlocks", Material.GLOWSTONE.toString());
+		String outerPlat = config.getString("PopulationDensity.PostDesign.PlatformOuterRing", Material.STONE_BRICKS.toString());  //default stone brick
+		String innerPlat = config.getString("PopulationDensity.PostDesign.PlatformInnerRing", Material.STONE_BRICKS.toString());
 		this.nearbyMonsterSpawnLimit = config.getInt("PopulationDensity.Max Monsters In Chunk To Spawn More", 2);
 		this.nearbyMonsterSpawnLimit = config.getInt("PopulationDensity.Max Monsters Nearby For More To Spawn", nearbyMonsterSpawnLimit);
 		this.abandonedFarmAnimalsDie = config.getBoolean("PopulationDensity.Abandoned Farm Animals Die", true);
@@ -225,30 +221,26 @@ public class PopulationDensity extends JavaPlugin
 		this.markRemovedEntityLocations = config.getBoolean("PopulationDensity.Mark Abandoned Removed Animal Locations With Shrubs", true);
 		this.removeWildSkeletalHorses = config.getBoolean("PopulationDensity.Remove Wild Skeletal Horses", true);
 		
-		SimpleEntry<Integer, Integer> result;
+		Material result;
 		result = this.processMaterials(topper);
 		if(result != null)
 		{
-		    this.postTopperId = result.getKey();
-		    this.postTopperData = result.getValue();
+		    this.postTopperId = result;
 		}
 		result = this.processMaterials(post);
 		if(result != null)
         {
-            this.postId = result.getKey();
-            this.postData = result.getValue();
+            this.postId = result;
         }
 		result = this.processMaterials(outerPlat);
 		if(result != null)
         {
-            this.outerPlatformId = result.getKey();
-            this.outerPlatformData = result.getValue();
+            this.outerPlatformId = result;
         }
 		result = this.processMaterials(innerPlat);
 		if(result != null)
         {
-            this.innerPlatformId = result.getKey();
-            this.innerPlatformData = result.getValue();
+            this.innerPlatformId = result;
         }
 		
 		List <String> defaultRegionNames = Arrays.asList(
@@ -1266,7 +1258,7 @@ public class PopulationDensity extends JavaPlugin
     					for(int y = 0; y < ManagedWorld.getMaxHeight(); y++)
     					{
     						//if we find something, save the snapshot to the snapshot array
-    						if(snapshot.getBlockTypeId(0, y, 0) != Material.AIR.getId())
+    						if(snapshot.getBlockType(0, y, 0) != Material.AIR)
     						{
     							foundNonAir = true;
     							snapshots[x][z] = snapshot;
@@ -1417,24 +1409,15 @@ public class PopulationDensity extends JavaPlugin
         }
 	}
 	
-	private SimpleEntry<Integer, Integer> processMaterials(String string)
+	private Material processMaterials(String string)
 	{
-        String [] elements = string.split(":");
-        if(elements.length < 2)
-        {
-            PopulationDensity.AddLogEntry("Couldn't understand config entry '" + string + "'.  Use format 'id:data'.");
-            return null;
-        }
-        
         try
         {
-            int id_output = Integer.parseInt(elements[0]);
-            int data_output = Integer.parseInt(elements[1]);
-            return new SimpleEntry<Integer, Integer>(id_output, data_output);
+            return Material.getMaterial(string);
         }
-        catch(NumberFormatException e)
+        catch(Exception e)
         {
-            PopulationDensity.AddLogEntry("Couldn't understand config entry '" + string + "'.  Use format 'id:data'.");
+            PopulationDensity.AddLogEntry("Couldn't understand config entry '" + string + "'.  Use a material'.");
         }
         
         return null;
@@ -1519,4 +1502,32 @@ public class PopulationDensity extends JavaPlugin
         player.setGliding(false);
         return true;
     }
+
+
+    protected static boolean isSapling(Material m) {
+    	return m.equals(Material.SPRUCE_SAPLING) || m.equals(Material.ACACIA_SAPLING) || m.equals(Material.BIRCH_SAPLING)
+				|| m.equals(Material.DARK_OAK_SAPLING) || m.equals(Material.JUNGLE_SAPLING) || m.equals(Material.OAK_SAPLING);
+	}
+
+	protected static boolean isLog(Material m) {
+		return m.equals(Material.SPRUCE_LOG) || m.equals(Material.ACACIA_LOG) || m.equals(Material.BIRCH_LOG)
+				|| m.equals(Material.DARK_OAK_LOG) || m.equals(Material.JUNGLE_LOG) || m.equals(Material.OAK_LOG);
+	}
+
+	protected static boolean isDoor(Material m) {
+		return m.equals(Material.SPRUCE_DOOR) || m.equals(Material.ACACIA_DOOR) || m.equals(Material.BIRCH_DOOR)
+				|| m.equals(Material.DARK_OAK_DOOR) || m.equals(Material.JUNGLE_DOOR) || m.equals(Material.OAK_DOOR) || m.equals(Material.IRON_DOOR);
+	}
+
+	protected static boolean isTrapDoor(Material m) {
+		return m.equals(Material.SPRUCE_TRAPDOOR) || m.equals(Material.ACACIA_TRAPDOOR) || m.equals(Material.BIRCH_TRAPDOOR)
+				|| m.equals(Material.DARK_OAK_TRAPDOOR) || m.equals(Material.JUNGLE_TRAPDOOR) || m.equals(Material.OAK_TRAPDOOR) || m.equals(Material.IRON_TRAPDOOR);
+	}
+
+	protected static boolean isBed(Material m) {
+		return m.equals(Material.BLACK_BED) || m.equals(Material.BLUE_BED) || m.equals(Material.BROWN_BED) || m.equals(Material.CYAN_BED) || m.equals(Material.GRAY_BED) ||
+				m.equals(Material.GREEN_BED) || m.equals(Material.LIGHT_BLUE_BED) || m.equals(Material.LIGHT_GRAY_BED) || m.equals(Material.LIME_BED) || m.equals(Material.MAGENTA_BED) ||
+				m.equals(Material.ORANGE_BED) || m.equals(Material.PINK_BED) || m.equals(Material.PURPLE_BED) || m.equals(Material.RED_BED) || m.equals(Material.WHITE_BED) ||
+				m.equals(Material.YELLOW_BED);
+	}
 }

@@ -111,16 +111,30 @@ public class ScanRegionTask extends Thread
 			
 			//if it's not a pass-through block
 			if(		material != Material.AIR && 
-					material != Material.WOOD_DOOR && 
-					material != Material.WOODEN_DOOR &&
-					material != Material.IRON_DOOR_BLOCK && 
-					material != Material.TRAP_DOOR &&
+					material != Material.OAK_DOOR &&
+					material != Material.ACACIA_DOOR &&
+					material != Material.JUNGLE_LOG &&
+					material != Material.SPRUCE_LOG &&
+					material != Material.DARK_OAK_LOG &&
+					material != Material.BIRCH_LOG &&
+					material != Material.IRON_DOOR &&
+					material != Material.ACACIA_TRAPDOOR &&
+					material != Material.BIRCH_TRAPDOOR &&
+					material != Material.DARK_OAK_TRAPDOOR &&
+					material != Material.IRON_TRAPDOOR &&
+					material != Material.JUNGLE_TRAPDOOR &&
+					material != Material.OAK_TRAPDOOR &&
+					material != Material.SPRUCE_TRAPDOOR &&
 					material != Material.LADDER
 					)
 			{
 				//if it's a valuable resource, count it
-				if      (material == Material.LOG) woodCount++;
-				else if (material == Material.LOG_2) woodCount++;
+				if      (material == Material.ACACIA_LOG) woodCount++;
+				else if (material == Material.OAK_LOG) woodCount++;
+				else if (material == Material.BIRCH_LOG) woodCount++;
+				else if (material == Material.DARK_OAK_LOG) woodCount++;
+				else if (material == Material.SPRUCE_LOG) woodCount++;
+				else if (material == Material.JUNGLE_LOG) woodCount++;
 				else if (material == Material.COAL_ORE) coalCount++;
 				else if (material == Material.IRON_ORE) ironCount++;
 				else if (material == Material.GOLD_ORE) goldCount++;
@@ -130,40 +144,48 @@ public class ScanRegionTask extends Thread
 				//if it's a player block, count it
 				else if (
 						material != Material.WATER && 
-						material != Material.STATIONARY_LAVA &&
-						material != Material.STATIONARY_WATER &&
+						material != Material.LAVA &&
+						material != Material.WATER &&
 						material != Material.BROWN_MUSHROOM && 
 						material != Material.CACTUS &&
 						material != Material.DEAD_BUSH && 
 						material != Material.DIRT &&
 						material != Material.GRAVEL &&
 						material != Material.GRASS &&
-						material != Material.HUGE_MUSHROOM_1 &&
-						material != Material.HUGE_MUSHROOM_2 &&
+						material != Material.RED_MUSHROOM_BLOCK &&
+						material != Material.BROWN_MUSHROOM_BLOCK &&
 						material != Material.ICE &&
 						material != Material.LAPIS_ORE &&
 						material != Material.LAVA &&
 						material != Material.OBSIDIAN &&
 						material != Material.RED_MUSHROOM &&
-						material != Material.RED_ROSE &&
-						material != Material.LEAVES &&
-				        material != Material.LEAVES_2 &&
-		                material != Material.LOG &&
-		                material != Material.LOG_2 &&
-						material != Material.LONG_GRASS &&
+						material != Material.ROSE_BUSH &&
+						material != Material.ACACIA_LEAVES &&
+								material != Material.BIRCH_LEAVES &&
+								material != Material.DARK_OAK_LEAVES &&
+								material != Material.JUNGLE_LEAVES &&
+								material != Material.OAK_LEAVES &&
+								material != Material.SPRUCE_LEAVES &&
+		                material != Material.BIRCH_LOG &&
+								material != Material.DARK_OAK_LOG &&
+								material != Material.SPRUCE_LOG &&
+								material != Material.JUNGLE_LOG &&
+								material != Material.OAK_LOG &&
+								material != Material.ACACIA_LOG &&
+						material != Material.TALL_GRASS &&
 						material != Material.SAND &&
 						material != Material.SANDSTONE &&
 						material != Material.SNOW &&
 						material != Material.STONE &&
 						material != Material.VINE &&
-						material != Material.WATER_LILY &&
-						material != Material.YELLOW_FLOWER &&
+						material != Material.LILY_PAD &&
+						material != Material.SUNFLOWER &&
 						material != Material.MOSSY_COBBLESTONE && 
 						material != Material.CLAY &&
-						material != Material.STAINED_CLAY &&
-						material != Material.SUGAR_CANE_BLOCK &&
+						material != Material.TERRACOTTA &&
+						material != Material.SUGAR_CANE &&
 						material != Material.PACKED_ICE &&
-						material != Material.DOUBLE_PLANT)
+						material != Material.CHORUS_FLOWER)
 				{
 					playerBlocks++;
 				}
@@ -276,8 +298,7 @@ public class ScanRegionTask extends Thread
 		try
 		{
 			ChunkSnapshot snapshot = this.chunks[chunkx][chunkz];
-			int materialID = snapshot.getBlockTypeId(position.x % 16, position.y, position.z % 16);
-			material = Material.getMaterial(materialID);
+			material = snapshot.getBlockType(position.x % 16, position.y, position.z % 16);
 		}
 		catch(IndexOutOfBoundsException e) { }
 		

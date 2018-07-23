@@ -41,14 +41,21 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class BlockEventHandler implements Listener 
 {
     private static List<Material> alwaysBreakableMaterials = Arrays.asList(
-        Material.LONG_GRASS,
-        Material.DOUBLE_PLANT,
-        Material.LOG,
-        Material.LOG_2,
-        Material.LEAVES,
-        Material.LEAVES_2,
-        Material.RED_ROSE,
-        Material.YELLOW_FLOWER,
+        Material.TALL_GRASS,
+		Material.OAK_LOG,
+        Material.ACACIA_LOG,
+        Material.BIRCH_LOG,
+        Material.DARK_OAK_LOG,
+        Material.JUNGLE_LOG,
+        Material.SPRUCE_LOG,
+        Material.ACACIA_LEAVES,
+        Material.BIRCH_LEAVES,
+        Material.DARK_OAK_LEAVES,
+        Material.JUNGLE_LEAVES,
+        Material.OAK_LEAVES,
+        Material.SPRUCE_LEAVES,
+        Material.ROSE_BUSH,
+        Material.SUNFLOWER,
         Material.SNOW_BLOCK
     );
     
@@ -177,7 +184,7 @@ public class BlockEventHandler implements Listener
 		
 		//if bed or chest and player has not been reminded about /movein this play session
 		if(type == null) type = block.getType();
-		if(type == Material.BED || type == Material.CHEST)
+		if(PopulationDensity.isBed(type) || type == Material.CHEST)
 		{
 			PlayerData playerData = PopulationDensity.instance.dataStore.getPlayerData(player);
 			if(playerData.advertisedMoveInThisSession) return;
@@ -197,7 +204,7 @@ public class BlockEventHandler implements Listener
         Player player = damageEvent.getPlayer();
         
         Block block = damageEvent.getBlock();
-        if(player == null || (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST)) return;
+        if(player == null || (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN)) return;
         
         //if the player is not in managed world, do nothing
         if(!player.getWorld().equals(PopulationDensity.ManagedWorld)) return;

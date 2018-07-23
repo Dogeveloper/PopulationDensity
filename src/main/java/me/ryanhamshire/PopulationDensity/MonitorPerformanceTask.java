@@ -123,6 +123,7 @@ public class MonitorPerformanceTask implements Runnable
             EntityType.OCELOT,
             EntityType.RABBIT,
             EntityType.MUSHROOM_COW
+
         ));
         
         int totalEntities = 0;
@@ -229,9 +230,9 @@ public class MonitorPerformanceTask implements Runnable
                             {
                                 Block block = entity.getLocation().getBlock();
                                 Material blockType = block.getType();
-                                if(blockType == Material.LONG_GRASS || blockType == Material.AIR)
+                                if(blockType == Material.TALL_GRASS || blockType == Material.AIR)
                                 {
-                                    block.setTypeIdAndData(31, (byte)0, false);  //dead bush
+                                    block.setType(Material.DEAD_BUSH); //dead bush
                                 }
                             }
                         }

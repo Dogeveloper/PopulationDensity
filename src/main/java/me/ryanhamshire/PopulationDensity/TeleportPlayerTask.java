@@ -23,15 +23,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 //teleports a player.  useful as scheduled task so that a joining player may be teleported (otherwise error)
@@ -47,8 +39,7 @@ class TeleportPlayerTask implements Runnable
 		this.destination = destination;
 		this.makeFallDamageImmune = makeFallDamageImmune;
 	}
-	
-	@Override
+
 	public void run()
 	{
 		ArrayList<Entity> entitiesToTeleport = new ArrayList<Entity>();
@@ -87,7 +78,7 @@ class TeleportPlayerTask implements Runnable
                 }
             }
             
-            else if(entity instanceof Animals && entity.getType() != EntityType.HORSE)
+            else if((entity instanceof Animals || entity instanceof Villager || entity instanceof Snowman || entity instanceof IronGolem) && entity.getType() != EntityType.HORSE)
             {
                 entitiesToTeleport.add(entity);
             }
@@ -109,7 +100,7 @@ class TeleportPlayerTask implements Runnable
 		}
 		
 		//sound effect
-        player.playSound(destination, Sound.ENTITY_ENDERMEN_TELEPORT, 1f, 1f);
+        player.playSound(destination, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
         
 		for(Entity entity : entitiesToTeleport)
 	    {

@@ -14,7 +14,7 @@ public class AfkCheckTask implements Runnable
 		this.playerData = playerData;
 	}
 	
-	@Override
+
 	public void run() 
 	{
 		if(!player.isOnline()) return;
