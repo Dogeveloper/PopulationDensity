@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
@@ -155,7 +156,6 @@ public class EntityEventHandler implements Listener
 		{
 			//block.setTypeIdAndData(item.getTypeId(), item.getData().getData(), false);
 			block.setType(item.getType());
-			block.setBlockData((BlockData) item.getData());
 		}
 	}	
 	

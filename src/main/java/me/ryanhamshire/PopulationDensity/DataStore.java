@@ -28,6 +28,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,6 +36,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.StringUtil;
 
 import com.google.common.collect.ImmutableList;
@@ -566,8 +569,8 @@ public class DataStore implements TabCompleter
 		block.setType(Material.SIGN);
 		
 		org.bukkit.block.Sign sign = (org.bukkit.block.Sign)block.getState();
-		sign.setLine(1, PopulationDensity.capitalize(regionName));
-		sign.setLine(2, "Region");
+		sign.setLine(1, ChatColor.BOLD + PopulationDensity.capitalize(regionName));
+		sign.setLine(2, ChatColor.BOLD + "Region");
 		sign.update();
 		
 		//add a sign for the region to the south
@@ -576,20 +579,20 @@ public class DataStore implements TabCompleter
 		regionName = PopulationDensity.capitalize(regionName);
 		
 		block = PopulationDensity.ManagedWorld.getBlockAt(x, y + 2, z - 1);
-		
-		org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-		signData.setFacingDirection(BlockFace.NORTH);
+
+		block.setType(Material.WALL_SIGN);
+		org.bukkit.block.data.type.WallSign s = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+		s.setFacing(BlockFace.NORTH);
 		
 		//block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
-		block.setType(Material.WALL_SIGN);
-		block.setBlockData(sign.getBlockData());
-		
+
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, "<--");
-		sign.setLine(1, regionName);
-	    sign.setLine(2, "Region");
-		sign.setLine(3, "<--");
+		sign.setLine(0, ChatColor.DARK_BLUE + "<--");
+		sign.setLine(1, ChatColor.DARK_BLUE + regionName);
+	    sign.setLine(2, ChatColor.DARK_BLUE + "Region");
+		sign.setLine(3, ChatColor.DARK_BLUE + "<--");
 		
 		sign.update();
 		
@@ -612,22 +615,21 @@ public class DataStore implements TabCompleter
 		regionName = this.getRegionName(new RegionCoordinates(region.x, region.z - 1));
 		if(regionName == null) regionName = "Wilderness";
 		regionName = PopulationDensity.capitalize(regionName);
-		
+
 		block = PopulationDensity.ManagedWorld.getBlockAt(x - 1, y + 2, z);
-		
-		signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-		signData.setFacingDirection(BlockFace.WEST);
-		
-		//block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
+
         block.setType(Material.WALL_SIGN);
-        block.setBlockData(sign.getBlockData());
-		
+		org.bukkit.block.data.type.WallSign s15 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+		s15.setFacing(BlockFace.WEST);
+		block.setBlockData(s15);
+
+
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, "<--");
-        sign.setLine(1, regionName);
-        sign.setLine(2, "Region");
-        sign.setLine(3, "<--");
+		sign.setLine(0, ChatColor.RED + "<--");
+        sign.setLine(1, ChatColor.RED +  regionName);
+        sign.setLine(2, ChatColor.RED +  "Region");
+        sign.setLine(3, ChatColor.RED +  "<--");
 		
 		sign.update();
 		
@@ -635,21 +637,20 @@ public class DataStore implements TabCompleter
 		if(PopulationDensity.instance.allowTeleportation)
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x - 1, y + 3, z);
-			
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.WEST);
-			
-			//LEGACY: block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
+
             block.setType(Material.WALL_SIGN);
-            block.setBlockData(sign.getBlockData());
+            org.bukkit.block.data.type.WallSign s8 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+            s8.setFacing(BlockFace.WEST);
+            block.setBlockData(s8);
+
 
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
-			sign.setLine(0, "Teleport");
-			sign.setLine(1, "From Here!");
-			sign.setLine(2, "Punch For");
-			sign.setLine(3, "Instructions");
+			sign.setLine(0, ChatColor.DARK_AQUA + "Teleport");
+			sign.setLine(1, ChatColor.DARK_AQUA + "From Here!");
+			sign.setLine(2, ChatColor.DARK_AQUA + "Punch For");
+			sign.setLine(3, ChatColor.DARK_AQUA + "Instructions");
 			
 			sign.update();
 		}
@@ -660,20 +661,19 @@ public class DataStore implements TabCompleter
 		regionName = PopulationDensity.capitalize(regionName);
 		
 		block = PopulationDensity.ManagedWorld.getBlockAt(x + 1, y + 2, z);
-		
-		signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-		signData.setFacingDirection(BlockFace.EAST);
-		
-		//block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
+
         block.setType(Material.WALL_SIGN);
-        block.setBlockData((sign.getBlockData()));
+        org.bukkit.block.data.type.WallSign s1 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+        s1.setFacing(BlockFace.EAST);
+		block.setBlockData(s1);
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, "<--");
-        sign.setLine(1, regionName);
-        sign.setLine(2, "Region");
-        sign.setLine(3, "<--");
+		sign.setLine(0, ChatColor.DARK_PURPLE + "<--");
+        sign.setLine(1, ChatColor.DARK_PURPLE + regionName);
+        sign.setLine(2, ChatColor.DARK_PURPLE + "Region");
+        sign.setLine(3, ChatColor.DARK_PURPLE + "<--");
 		
 		sign.update();
 		
@@ -681,19 +681,19 @@ public class DataStore implements TabCompleter
 		if(PopulationDensity.instance.allowTeleportation)
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x + 1, y + 3, z);
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.EAST);
-			
 			block.setType(Material.WALL_SIGN);
-			block.setBlockData(sign.getBlockData());
+			org.bukkit.block.data.type.WallSign s2 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+			s2.setFacing(BlockFace.EAST);
+			block.setBlockData(s2);
 
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
-			sign.setLine(0, "Teleport");
-            sign.setLine(1, "From Here!");
-            sign.setLine(2, "Punch For");
-            sign.setLine(3, "Instructions");
+			sign.setLine(0, ChatColor.GREEN + "Teleport");
+            sign.setLine(1, ChatColor.GREEN + "From Here!");
+            sign.setLine(2, ChatColor.GREEN + "Punch For");
+            sign.setLine(3, ChatColor.GREEN + "Instructions");
 			
 			sign.update();
 		}
@@ -704,19 +704,19 @@ public class DataStore implements TabCompleter
 		regionName = PopulationDensity.capitalize(regionName);
 		
 		block = PopulationDensity.ManagedWorld.getBlockAt(x, y + 2, z + 1);
-		
-		signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-		signData.setFacingDirection(BlockFace.SOUTH);
-		
+
 		block.setType(Material.WALL_SIGN);
-		block.setBlockData(sign.getBlockData());
+		org.bukkit.block.data.type.WallSign s2a = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+		s2a.setFacing(BlockFace.SOUTH);
+		block.setBlockData(s2a);
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, "<--");
-        sign.setLine(1, regionName);
-        sign.setLine(2, "Region");
-        sign.setLine(3, "<--");
+		sign.setLine(0, ChatColor.GOLD + "<--");
+        sign.setLine(1, ChatColor.GOLD +regionName);
+        sign.setLine(2, ChatColor.GOLD + "Region");
+        sign.setLine(3, ChatColor.GOLD + "<--");
 		
 		sign.update();
 		
@@ -741,11 +741,11 @@ public class DataStore implements TabCompleter
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x, y + 3, z - 1);
 
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.NORTH);
-			
 			block.setType(Material.WALL_SIGN);
-			block.setBlockData(sign.getBlockData());
+			org.bukkit.block.data.type.WallSign s3 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+			s3.setFacing(BlockFace.NORTH);
+			block.setBlockData(s3);
 
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -761,11 +761,11 @@ public class DataStore implements TabCompleter
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x - 1, y + 1, z);
 
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.WEST);
-			
 			block.setType(Material.WALL_SIGN);
-			block.setBlockData(sign.getBlockData());
+			org.bukkit.block.data.type.WallSign s4 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+			s4.setFacing(BlockFace.WEST);
+			block.setBlockData(s4);
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -780,13 +780,14 @@ public class DataStore implements TabCompleter
 		if(PopulationDensity.instance.southCustomSignContent != null)
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x + 1, y + 1, z);
-			
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.EAST);
 
-            block.setType(Material.WALL_SIGN);
-            block.setBlockData(sign.getBlockData());
-			
+			block.setType(Material.WALL_SIGN);
+			org.bukkit.block.data.type.WallSign s5 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+			s5.setFacing(BlockFace.EAST);
+			block.setBlockData(s5);
+
+
 			sign = (org.bukkit.block.Sign)block.getState();
 			
 			for(int i = 0; i < 4; i++)
@@ -800,12 +801,13 @@ public class DataStore implements TabCompleter
 		if(PopulationDensity.instance.eastCustomSignContent != null)
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x, y + 1, z - 1);
-			
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.NORTH);
 
-            block.setType(Material.WALL_SIGN);
-            block.setBlockData(sign.getBlockData());
+			block.setType(Material.WALL_SIGN);
+			org.bukkit.block.data.type.WallSign s5a = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+			s5a.setFacing(BlockFace.NORTH);
+
+			block.setBlockData(s5a);
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -820,12 +822,12 @@ public class DataStore implements TabCompleter
 		if(PopulationDensity.instance.westCustomSignContent != null)
 		{
 			block = PopulationDensity.ManagedWorld.getBlockAt(x, y + 1, z + 1);
-			
-			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-			signData.setFacingDirection(BlockFace.SOUTH);
 
-            block.setType(Material.WALL_SIGN);
-            block.setBlockData(sign.getBlockData());
+			block.setType(Material.WALL_SIGN);
+			org.bukkit.block.data.type.WallSign s6 = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+
+			s6.setFacing(BlockFace.SOUTH);
+			block.setBlockData(s6);
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			

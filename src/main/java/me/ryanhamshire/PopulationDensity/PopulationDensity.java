@@ -322,7 +322,9 @@ public class PopulationDensity extends JavaPlugin
             "copper",
             "moonBeam",
             "soil",
-            "dust"
+            "dust",
+				"turtle"
+
         );
 		
 		this.config_regionNames = new ArrayList<String>();
@@ -674,13 +676,15 @@ public class PopulationDensity extends JavaPlugin
 			}
 			
 			String regionName = this.dataStore.getRegionName(currentRegion);
+			Location mrcRegionPostLocation = getRegionCenter(currentRegion, true);
 			if(regionName == null)
 			{
-			    PopulationDensity.sendMessage(player, TextMode.Info, Messages.UnnamedRegion);
+			    //mrc
+				player.sendMessage(ChatColor.YELLOW + "You're in a wilderness region (" + currentRegion.x + ", " + currentRegion.z + "). The closest region post to you is at " + mrcRegionPostLocation.getX() + " " + mrcRegionPostLocation.getY() + " " + mrcRegionPostLocation.getZ());
 			}
 			else
 			{
-				PopulationDensity.sendMessage(player, TextMode.Info, Messages.WhichRegion, capitalize(regionName));				
+				player.sendMessage(ChatColor.YELLOW + "You're in the " + regionName + " region (" + currentRegion.x + ", " + currentRegion.z + "). The closest region post to you is at " + mrcRegionPostLocation.getX() + " " + mrcRegionPostLocation.getY() + " " + mrcRegionPostLocation.getZ());
 			}
 			
 			return true;

@@ -1,8 +1,12 @@
 package me.ryanhamshire.PopulationDensity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 
@@ -110,7 +114,13 @@ public class ScanRegionTask extends Thread
 			if(material == null || currentPosition.y < min_y) continue;
 			
 			//if it's not a pass-through block
-			if(		material != Material.AIR && 
+			if(		material != Material.AIR &&
+					material != Material.GRASS_BLOCK &&
+					material != Material.CAVE_AIR &&
+					material != Material.POPPY &&
+					material != Material.TALL_SEAGRASS &&
+					material != Material.KELP &&
+					material != Material.SNOW_BLOCK &&
 					material != Material.OAK_DOOR &&
 					material != Material.ACACIA_DOOR &&
 					material != Material.JUNGLE_LOG &&
@@ -161,6 +171,11 @@ public class ScanRegionTask extends Thread
 						material != Material.RED_MUSHROOM &&
 						material != Material.ROSE_BUSH &&
 						material != Material.ACACIA_LEAVES &&
+								material != Material.DIORITE &&
+								material != Material.FERN &&
+								material != Material.LARGE_FERN &&
+								material != Material.SEAGRASS &&
+								material != Material.SEA_PICKLE &&
 								material != Material.BIRCH_LEAVES &&
 								material != Material.DARK_OAK_LEAVES &&
 								material != Material.JUNGLE_LEAVES &&
@@ -185,8 +200,32 @@ public class ScanRegionTask extends Thread
 						material != Material.TERRACOTTA &&
 						material != Material.SUGAR_CANE &&
 						material != Material.PACKED_ICE &&
+								material != Material.ANDESITE &&
+								material != Material.GRANITE &&
+								material != Material.BLUE_ORCHID &&
+								material != Material.ALLIUM &&
+								material != Material.AZURE_BLUET &&
+								material != Material.RED_TULIP &&
+								material != Material.ORANGE_TULIP &&
+								material != Material.WHITE_TULIP &&
+								material != Material.PINK_TULIP &&
+								material != Material.OXEYE_DAISY &&
+								material != Material.BROWN_MUSHROOM &&
+								material != Material.PUMPKIN &&
+								material != Material.VINE &&
+
 						material != Material.CHORUS_FLOWER)
 				{
+					//Set<Material> debugMaterials = new HashSet<Material>();
+					//try {
+						//debugMaterials.add(material);
+					//}
+					//catch(Exception e) {
+
+					//}
+					//debugMaterials.forEach(m -> {
+						//Bukkit.getLogger().log(Level.WARNING, m.toString());
+					//});
 					playerBlocks++;
 				}
 			}

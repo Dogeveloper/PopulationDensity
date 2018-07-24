@@ -60,7 +60,7 @@ public class BlockEventHandler implements Listener
     );
     
 	//when a player breaks a block...
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent breakEvent)
 	{
 		Player player = breakEvent.getPlayer();
@@ -131,7 +131,7 @@ public class BlockEventHandler implements Listener
 	}
 	
 	//when a player places a block
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onBlockPlace(BlockPlaceEvent placeEvent)
 	{
 		Player player = placeEvent.getPlayer();
