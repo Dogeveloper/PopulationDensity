@@ -201,18 +201,18 @@ public class BlockEventHandler implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent damageEvent)
     {
-    	System.out.println("ONBLOCKDAMAGE FIRED!");
+    	//System.out.println("ONBLOCKDAMAGE FIRED!");
         Player player = damageEvent.getPlayer();
         
         Block block = damageEvent.getBlock();
         if(player == null || (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN)) return;
-		System.out.println("ONBLOCKDAMAGE FIRED! 2");
+		//System.out.println("ONBLOCKDAMAGE FIRED! 2");
         //if the player is not in managed world, do nothing
         if(!player.getWorld().equals(PopulationDensity.ManagedWorld)) return;
-		System.out.println("ONBLOCKDAMAGE FIRED! 3");
+		//System.out.println("ONBLOCKDAMAGE FIRED! 3");
         
         if(!this.nearRegionPost(block.getLocation(), RegionCoordinates.fromLocation(block.getLocation()), 1)) return;
-		System.out.println("ONBLOCKDAMAGE FIRED! 4");
+		//System.out.println("ONBLOCKDAMAGE FIRED! 4");
         
         PopulationDensity.sendMessage(player, TextMode.Instr, Messages.HelpMessage1, ChatColor.UNDERLINE + "" + ChatColor.AQUA + "http://bit.ly/mcregions");
     }
