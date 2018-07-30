@@ -1,7 +1,7 @@
 name: PopulationDensity
 main: me.ryanhamshire.PopulationDensity.PopulationDensity
 softdepend: [Multiverse-Core, My Worlds, Transporter, MystCraft]
-version: 5.8.5
+version: 5.8.6
 api-version: 1.13
 authors: [Steve, Mrawesomecookie]
 commands:
@@ -60,6 +60,9 @@ commands:
    cancelinvite:
       descripion: Deletes an invite.
       aliases: [uninvite, deleteinvite, invitecancel]
+   showvisits:
+      description: Toggle visit messages.
+      aliases: [togglevisits]
    loginpriority:
       description: Sets the login priority for a player.
       usage: /LoginPriority <player name> <priority, 0 - 100>

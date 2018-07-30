@@ -571,7 +571,17 @@ public class PopulationDensity extends JavaPlugin
 			
 			playerData = this.dataStore.getPlayerData(player);
 		}
-		
+		if(cmd.getName().equalsIgnoreCase("showvisits")) {
+		    if(getConfig().get("showvisits." + player.getUniqueId()) == null) {
+		        getConfig().set("showvisits." + player.getUniqueId().toString(), false);
+            }
+            else {
+                getConfig().set("showvisits." + player.getUniqueId().toString(), !getConfig().getBoolean("showvisits." + player.getUniqueId()));
+            }
+			saveConfig();
+			reloadConfig();
+			player.sendMessage(ChatColor.GREEN + "Toggled visit messages to " + (getConfig().getBoolean("showvisits." + player.getUniqueId().toString()) ? "on" : "off") + ".");
+		}
 		if(cmd.getName().equalsIgnoreCase("visit") && player != null)
 		{			
 		    if(args.length < 1) return false;
@@ -587,8 +597,19 @@ public class PopulationDensity extends JavaPlugin
 			    if(InviteManager.instance().canTravel(player, targetPlayer))
 			    {
 			    	if(targetPlayer.isOnline()) {
-						getServer().getPlayer(targetPlayer.getName()).sendMessage(ChatColor.AQUA + player.getDisplayName() + ChatColor.AQUA + " visited your home region.");
-					}
+			    	    boolean toSendMessage = false;
+			    		if(getConfig().get("showvisits." + targetPlayer.getUniqueId()) == null) {
+                            toSendMessage = true;
+						}
+						else {
+                            if(getConfig().getBoolean("showvisits." + targetPlayer.getUniqueId())) {
+                                toSendMessage = true;
+                            }
+                        }
+                        if(toSendMessage) {
+                            getServer().getPlayer(targetPlayer.getName()).sendMessage(ChatColor.AQUA + player.getDisplayName() + ChatColor.AQUA + " visited your home region. Disable this message with /showvisits.");
+                        }
+			    	}
 			        if(result.nearPost && this.launchPlayer(player))
 			        {
 			            this.TeleportPlayer(player, targetPlayerData.homeRegion, 2);

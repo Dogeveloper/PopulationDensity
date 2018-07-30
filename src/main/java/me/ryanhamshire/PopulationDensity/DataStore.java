@@ -567,6 +567,10 @@ public class DataStore implements TabCompleter
 		regionName = PopulationDensity.capitalize(regionName);
 		Block block = PopulationDensity.ManagedWorld.getBlockAt(x, y + 4, z);
 		block.setType(Material.SIGN);
+
+		org.bukkit.block.data.type.Sign spp = (org.bukkit.block.data.type.Sign) block.getBlockData();
+		spp.setRotation(BlockFace.NORTH);
+		block.setBlockData(spp);
 		
 		org.bukkit.block.Sign sign = (org.bukkit.block.Sign)block.getState();
 		sign.setLine(1, PopulationDensity.capitalize(regionName));
