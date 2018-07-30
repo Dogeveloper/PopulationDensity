@@ -591,7 +591,7 @@ public class PopulationDensity extends JavaPlugin
 			
 			@SuppressWarnings("deprecation")
             OfflinePlayer targetPlayer = this.getServer().getOfflinePlayer(args[0]);
-			if(targetPlayer != null)
+			if(targetPlayer.hasPlayedBefore() || targetPlayer.isOnline())
 			{
 			    PlayerData targetPlayerData = this.dataStore.getPlayerData(targetPlayer);
 			    if(InviteManager.instance().canTravel(player, targetPlayer))
