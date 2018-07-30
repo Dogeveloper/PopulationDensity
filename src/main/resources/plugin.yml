@@ -52,7 +52,6 @@ commands:
       permission: populationdensity.addregion
    invite:
       description: Invites a player to visit your home region.
-      usage: /invite <player name>
       alises: [invitetoregion, regioninvite, inviteregion]
    invitelist:
       description: Shows who you have invited to your home region.
@@ -60,7 +59,6 @@ commands:
       aliases: [listinvites, invites]
    cancelinvite:
       descripion: Deletes an invite.
-      usage: /cancelinvite <player name>
       aliases: [uninvite, deleteinvite, invitecancel]
    loginpriority:
       description: Sets the login priority for a player.

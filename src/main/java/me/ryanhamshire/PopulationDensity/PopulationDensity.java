@@ -797,43 +797,55 @@ public class PopulationDensity extends JavaPlugin
 		
 		else if(cmd.getName().equalsIgnoreCase("invite") && player != null)
 		{
-		    if(args.length < 1) return false;
-			
-			//send a notification to the invitee, if he's available
-			@SuppressWarnings("deprecation")
-            OfflinePlayer invitee = this.getServer().getOfflinePlayer(args[0]);
-			if(invitee != null && (invitee.hasPlayedBefore() || invitee.isOnline()))
-			{
-				//playerData = this.dataStore.getPlayerData(invitee);
-				//playerData.inviter = player;
-				InviteManager.instance().addInvite(player, invitee);
-				PopulationDensity.sendMessage(player, TextMode.Success, Messages.InviteConfirmation, invitee.getName(), player.getName());
-				player.sendMessage(ChatColor.YELLOW + "Note: Invitations do not expire anymore, but can be canceled at any time using /cancelinvite " + invitee.getName() + ". To see who you have invited, run /invitelist.");
+		    if(args.length == 1) {
+				//send a notification to the invitee, if he's available
+				@SuppressWarnings("deprecation")
+				OfflinePlayer invitee = this.getServer().getOfflinePlayer(args[0]);
+				if (invitee != null && (invitee.hasPlayedBefore() || invitee.isOnline())) {
+					//playerData = this.dataStore.getPlayerData(invitee);
+					//playerData.inviter = player;
+					InviteManager.instance().addInvite(player, invitee);
+					PopulationDensity.sendMessage(player, TextMode.Success, Messages.InviteConfirmation, invitee.getName(), player.getName());
+					player.sendMessage(ChatColor.YELLOW + "Note: Invitations do not expire anymore, but can be canceled at any time using /cancelinvite " + invitee.getName() + ". To see who you have invited, run /invitelist.");
+					return true;
+				}
 			}
-			else
-			{
-			    PopulationDensity.sendMessage(player, TextMode.Err, Messages.PlayerNotFound, args[0]);
+			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "You may invite the following players, or any offline player who you haven't already invited: ");
+			for (Player p : getServer().getOnlinePlayers()) {
+				if (!InviteManager.instance().canTravel(player, p)) {
+					sb.append(p.getName()).append(" ");
+				}
 			}
+			player.sendMessage(sb.toString());
+			player.sendMessage(ChatColor.YELLOW + "Usage: /invite <player>");
 			
 			return true;
 		}
 
 		else if (cmd.getName().equalsIgnoreCase("cancelinvite")) {
-			if(args.length < 1) return false;
-			OfflinePlayer uninvitee = this.getServer().getOfflinePlayer(args[0]);
-			if(uninvitee != null) {
-				if(InviteManager.instance().deleteInvite(player, uninvitee)) {
-					player.sendMessage(ChatColor.GREEN + "Invite deleted.");
+			if(args.length == 1) {
+				OfflinePlayer uninvitee = this.getServer().getOfflinePlayer(args[0]);
+				if (uninvitee != null) {
+					if (InviteManager.instance().deleteInvite(player, uninvitee)) {
+						player.sendMessage(ChatColor.GREEN + "Invite deleted.");
+					} else {
+						player.sendMessage(ChatColor.RED + "Invite could not be deleted.");
+					}
+					return true;
 				}
-				else {
-					player.sendMessage(ChatColor.RED + "Invite could not be deleted.");
+			}
+			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "You may cancel invites for the following players: ");
+			if(InviteManager.instance().getInvites(player).isPresent()) {
+				for(OfflinePlayer p : InviteManager.instance().getInvites(player).get()) {
+					sb.append(p.getName()).append(" ");
 				}
-				return true;
 			}
 			else {
-				PopulationDensity.sendMessage(player, TextMode.Err, Messages.PlayerNotFound, args[0]);
-				return true;
+				sb.append("none");
 			}
+			player.sendMessage(sb.toString());
+			player.sendMessage(ChatColor.YELLOW + "Usage: /cancelinvite <player>");
+			return true;
 		}
 
 		else if (cmd.getName().equalsIgnoreCase("invitelist")) {

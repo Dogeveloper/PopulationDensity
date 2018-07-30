@@ -28,7 +28,9 @@ public class InviteManager {
             invites = (List<String>) PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId().toString());
         }
         System.out.println("INVITES IS NULL: " + (invites == null ? "YES" : "NO"));
-        if(!PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId()).contains(invitee.getUniqueId().toString())) {
+        System.out.println("INVITES IS NULL: " + (invites == null ? "YES" : "NO"));
+
+        if(!invites.contains(invitee.getUniqueId().toString())) {
             invites.add(invitee.getUniqueId().toString());
         }
         PopulationDensity.instance.getConfig().set("invites." + inviter.getUniqueId(), invites);
