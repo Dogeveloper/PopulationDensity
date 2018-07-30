@@ -141,6 +141,7 @@ public class PopulationDensity extends JavaPlugin
 	}
 	
 	//initializes well...   everything
+	@Override
 	public void onEnable()
 	{ 		
 		AddLogEntry("PopulationDensity enabled.");		
@@ -427,7 +428,8 @@ public class PopulationDensity extends JavaPlugin
 		//set up region name tab completers
 		PluginCommand visitCommand = this.getCommand("visit");
 		visitCommand.setTabCompleter(this.dataStore);
-		
+
+
 		//player events, to control spawn, respawn, disconnect, and region-based notifications as players walk around
 		PlayerEventHandler playerEventHandler = new PlayerEventHandler(this.dataStore, this);
 		pluginManager.registerEvents(playerEventHandler, this);
@@ -578,12 +580,15 @@ public class PopulationDensity extends JavaPlugin
 		    if(!result.canTeleport) return true;
 			
 			@SuppressWarnings("deprecation")
-            Player targetPlayer = this.getServer().getPlayerExact(args[0]);
+            OfflinePlayer targetPlayer = this.getServer().getOfflinePlayer(args[0]);
 			if(targetPlayer != null)
 			{
 			    PlayerData targetPlayerData = this.dataStore.getPlayerData(targetPlayer);
-			    if(playerData.inviter != null && playerData.inviter.getName().equals(targetPlayer.getName()))
+			    if(InviteManager.instance().canTravel(player, targetPlayer))
 			    {
+			    	if(targetPlayer.isOnline()) {
+						getServer().getPlayer(targetPlayer.getName()).sendMessage(ChatColor.AQUA + player.getDisplayName() + ChatColor.AQUA + " visited your home region.");
+					}
 			        if(result.nearPost && this.launchPlayer(player))
 			        {
 			            this.TeleportPlayer(player, targetPlayerData.homeRegion, 2);
@@ -796,12 +801,14 @@ public class PopulationDensity extends JavaPlugin
 			
 			//send a notification to the invitee, if he's available
 			@SuppressWarnings("deprecation")
-            Player invitee = this.getServer().getPlayer(args[0]);			
-			if(invitee != null)
+            OfflinePlayer invitee = this.getServer().getOfflinePlayer(args[0]);
+			if(invitee != null && (invitee.hasPlayedBefore() || invitee.isOnline()))
 			{
-				playerData = this.dataStore.getPlayerData(invitee);
-				playerData.inviter = player;
+				//playerData = this.dataStore.getPlayerData(invitee);
+				//playerData.inviter = player;
+				InviteManager.instance().addInvite(player, invitee);
 				PopulationDensity.sendMessage(player, TextMode.Success, Messages.InviteConfirmation, invitee.getName(), player.getName());
+				player.sendMessage(ChatColor.YELLOW + "Note: Invitations do not expire anymore, but can be canceled at any time using /cancelinvite " + invitee.getName() + ". To see who you have invited, run /invitelist.");
 			}
 			else
 			{
@@ -809,6 +816,39 @@ public class PopulationDensity extends JavaPlugin
 			}
 			
 			return true;
+		}
+
+		else if (cmd.getName().equalsIgnoreCase("cancelinvite")) {
+			if(args.length < 1) return false;
+			OfflinePlayer uninvitee = this.getServer().getOfflinePlayer(args[0]);
+			if(uninvitee != null) {
+				if(InviteManager.instance().deleteInvite(player, uninvitee)) {
+					player.sendMessage(ChatColor.GREEN + "Invite deleted.");
+				}
+				else {
+					player.sendMessage(ChatColor.RED + "Invite could not be deleted.");
+				}
+				return true;
+			}
+			else {
+				PopulationDensity.sendMessage(player, TextMode.Err, Messages.PlayerNotFound, args[0]);
+				return true;
+			}
+		}
+
+		else if (cmd.getName().equalsIgnoreCase("invitelist")) {
+			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "Invites: ");
+			if(InviteManager.instance().getInvites(player).isPresent()) {
+				InviteManager.instance().getInvites(player).get().forEach(p -> {
+					sb.append(p.getName() + " ");
+				});
+				player.sendMessage(sb.toString());
+				return true;
+			}
+			else {
+				player.sendMessage(ChatColor.RED + "You have no invites.");
+				return true;
+			}
 		}
 		
 		else if(cmd.getName().equalsIgnoreCase("sendregion"))
@@ -1102,6 +1142,7 @@ public class PopulationDensity extends JavaPlugin
         return true;
     }
 
+    @Override
     public void onDisable()
 	{
 		AddLogEntry("PopulationDensity disabled.");

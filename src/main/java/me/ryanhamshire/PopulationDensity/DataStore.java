@@ -569,8 +569,8 @@ public class DataStore implements TabCompleter
 		block.setType(Material.SIGN);
 		
 		org.bukkit.block.Sign sign = (org.bukkit.block.Sign)block.getState();
-		sign.setLine(1, ChatColor.BOLD + PopulationDensity.capitalize(regionName));
-		sign.setLine(2, ChatColor.BOLD + "Region");
+		sign.setLine(1, PopulationDensity.capitalize(regionName));
+		sign.setLine(2, "Region");
 		sign.update();
 		
 		//add a sign for the region to the south
@@ -589,10 +589,10 @@ public class DataStore implements TabCompleter
 
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, ChatColor.DARK_BLUE + "<--");
-		sign.setLine(1, ChatColor.DARK_BLUE + regionName);
-	    sign.setLine(2, ChatColor.DARK_BLUE + "Region");
-		sign.setLine(3, ChatColor.DARK_BLUE + "<--");
+		sign.setLine(0, "<--");
+		sign.setLine(1,  regionName);
+	    sign.setLine(2, "Region");
+		sign.setLine(3,  "<--");
 		
 		sign.update();
 		
@@ -626,10 +626,10 @@ public class DataStore implements TabCompleter
 
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, ChatColor.RED + "<--");
-        sign.setLine(1, ChatColor.RED +  regionName);
-        sign.setLine(2, ChatColor.RED +  "Region");
-        sign.setLine(3, ChatColor.RED +  "<--");
+		sign.setLine(0, "<--");
+        sign.setLine(1, regionName);
+        sign.setLine(2, "Region");
+        sign.setLine(3, "<--");
 		
 		sign.update();
 		
@@ -647,10 +647,10 @@ public class DataStore implements TabCompleter
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
-			sign.setLine(0, ChatColor.DARK_AQUA + "Teleport");
-			sign.setLine(1, ChatColor.DARK_AQUA + "From Here!");
-			sign.setLine(2, ChatColor.DARK_AQUA + "Punch For");
-			sign.setLine(3, ChatColor.DARK_AQUA + "Instructions");
+			sign.setLine(0, "Teleport");
+			sign.setLine(1, "From Here!");
+			sign.setLine(2, "Punch For");
+			sign.setLine(3, "Instructions");
 			
 			sign.update();
 		}
@@ -670,10 +670,10 @@ public class DataStore implements TabCompleter
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, ChatColor.DARK_PURPLE + "<--");
-        sign.setLine(1, ChatColor.DARK_PURPLE + regionName);
-        sign.setLine(2, ChatColor.DARK_PURPLE + "Region");
-        sign.setLine(3, ChatColor.DARK_PURPLE + "<--");
+		sign.setLine(0, "<--");
+        sign.setLine(1,  regionName);
+        sign.setLine(2, "Region");
+        sign.setLine(3, "<--");
 		
 		sign.update();
 		
@@ -690,10 +690,10 @@ public class DataStore implements TabCompleter
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
-			sign.setLine(0, ChatColor.GREEN + "Teleport");
-            sign.setLine(1, ChatColor.GREEN + "From Here!");
-            sign.setLine(2, ChatColor.GREEN + "Punch For");
-            sign.setLine(3, ChatColor.GREEN + "Instructions");
+			sign.setLine(0, "Teleport");
+            sign.setLine(1, "From Here!");
+            sign.setLine(2, "Punch For");
+            sign.setLine(3, "Instructions");
 			
 			sign.update();
 		}
@@ -713,10 +713,10 @@ public class DataStore implements TabCompleter
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
-		sign.setLine(0, ChatColor.GOLD + "<--");
-        sign.setLine(1, ChatColor.GOLD +regionName);
-        sign.setLine(2, ChatColor.GOLD + "Region");
-        sign.setLine(3, ChatColor.GOLD + "<--");
+		sign.setLine(0, "<--");
+        sign.setLine(1, regionName);
+        sign.setLine(2, "Region");
+        sign.setLine(3, "<--");
 		
 		sign.update();
 		
