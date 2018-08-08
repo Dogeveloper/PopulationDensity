@@ -19,12 +19,8 @@
 package me.ryanhamshire.PopulationDensity;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -880,6 +876,23 @@ public class PopulationDensity extends JavaPlugin
 			}
 			else {
 				player.sendMessage(ChatColor.RED + "You have no invites.");
+				return true;
+			}
+		}
+		else if (cmd.getName().equalsIgnoreCase("visitlist")) {
+			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "You may visit the following players: ");
+			if(InviteManager.instance().toHashMap().isPresent()) {
+				HashMap<OfflinePlayer, List<OfflinePlayer>> m = InviteManager.instance().toHashMap().get();
+				m.forEach((key, value) -> {
+					if(value.contains((Player) sender)) {
+						sb.append(key.getName()).append(" ");
+					}
+				});
+				player.sendMessage(sb.toString());
+				return true;
+			}
+			else {
+				player.sendMessage(ChatColor.RED + "No invites.");
 				return true;
 			}
 		}

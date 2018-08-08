@@ -1,7 +1,7 @@
 name: PopulationDensity
 main: me.ryanhamshire.PopulationDensity.PopulationDensity
 softdepend: [Multiverse-Core, My Worlds, Transporter, MystCraft]
-version: 5.8.6b
+version: 5.8.7
 api-version: 1.13
 authors: [Steve, Mrawesomecookie]
 commands:
@@ -57,6 +57,9 @@ commands:
       description: Shows who you have invited to your home region.
       usage: /invitelist
       aliases: [listinvites, invites]
+   visitlist:
+      description: Shows who you can visit.
+      usage: /invitelist
    cancelinvite:
       descripion: Deletes an invite.
       aliases: [uninvite, deleteinvite, invitecancel]

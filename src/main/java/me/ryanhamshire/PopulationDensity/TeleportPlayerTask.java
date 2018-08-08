@@ -21,6 +21,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
@@ -78,7 +79,7 @@ class TeleportPlayerTask implements Runnable
                 }
             }
             
-            else if((entity instanceof Animals || entity instanceof Villager || entity instanceof Snowman || entity instanceof IronGolem) && entity.getType() != EntityType.HORSE)
+            else if((entity instanceof Animals || entity instanceof Villager || entity instanceof Snowman || entity instanceof IronGolem || entity instanceof Dolphin || entity instanceof Fish) && entity.getType() != EntityType.HORSE)
             {
                 entitiesToTeleport.add(entity);
             }
@@ -101,7 +102,6 @@ class TeleportPlayerTask implements Runnable
 		
 		//sound effect
         player.playSound(destination, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
-        
 		for(Entity entity : entitiesToTeleport)
 	    {
 	        if(!(entity instanceof LivingEntity)) continue;

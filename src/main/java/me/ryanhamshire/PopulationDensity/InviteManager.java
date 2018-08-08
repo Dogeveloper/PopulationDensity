@@ -20,7 +20,7 @@ public class InviteManager {
         List<String> invites;
         if(PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId()) == null) {
             invites = new ArrayList<String>();
-            PopulationDensity.instance.getConfig().set("invites" + inviter.getUniqueId(), invites);
+            PopulationDensity.instance.getConfig().set("invites." + inviter.getUniqueId(), invites);
             PopulationDensity.instance.saveConfig();
             PopulationDensity.instance.reloadConfig();
         }
@@ -36,6 +36,22 @@ public class InviteManager {
         PopulationDensity.instance.getConfig().set("invites." + inviter.getUniqueId(), invites);
         PopulationDensity.instance.saveConfig();
         PopulationDensity.instance.reloadConfig();
+    }
+
+    public Optional<HashMap<OfflinePlayer, List<OfflinePlayer>>> toHashMap() {
+        HashMap<OfflinePlayer, List<OfflinePlayer>> map = new HashMap<>();
+        if(PopulationDensity.instance.getConfig().getConfigurationSection("invites.") == null) {
+            return Optional.empty();
+        }
+        Map<String, Object> objs = PopulationDensity.instance.getConfig().getConfigurationSection("invites.").getValues(true);
+        objs.forEach((key, value) -> {
+            List<OfflinePlayer> offlines = new ArrayList<OfflinePlayer>();
+            for(String s : (List<String>) value) {
+                offlines.add(Bukkit.getServer().getOfflinePlayer(UUID.fromString(s)));
+            }
+            map.put(Bukkit.getServer().getOfflinePlayer(UUID.fromString(key)), offlines);
+        });
+        return Optional.of(map);
     }
 
     public boolean canTravel(OfflinePlayer visitor, OfflinePlayer host) {
