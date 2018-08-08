@@ -6,16 +6,18 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+//Dogeveloper: new InviteManager class to help manage invites.
 public class InviteManager {
 
-    //private HashMap<UUID, List<UUID>> inviteMap = new HashMap<UUID, List<UUID>>();
-
+    //Dogeveloper: create singleton
     private static InviteManager ourInstance = new InviteManager();
 
     public static InviteManager instance() {
         return ourInstance;
     }
 
+
+    //Dogeveloper: Adds a new home region invite to the configuration. Players can access this through /invite.
     public void addInvite(OfflinePlayer inviter, OfflinePlayer invitee) {
         List<String> invites;
         if(PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId()) == null) {
@@ -38,6 +40,8 @@ public class InviteManager {
         PopulationDensity.instance.reloadConfig();
     }
 
+
+    //Dogeveloper: Returns all data from InviteManager as a HashMap. Returns Optional.empty() if there is no data.
     public Optional<HashMap<OfflinePlayer, List<OfflinePlayer>>> toHashMap() {
         HashMap<OfflinePlayer, List<OfflinePlayer>> map = new HashMap<>();
         if(PopulationDensity.instance.getConfig().getConfigurationSection("invites.") == null) {
@@ -54,6 +58,7 @@ public class InviteManager {
         return Optional.of(map);
     }
 
+    //Dogeveloper: Checks if a player is invited to a home region. Accessed through /visit.
     public boolean canTravel(OfflinePlayer visitor, OfflinePlayer host) {
         if(PopulationDensity.instance.getConfig().getList("invites." + host.getUniqueId()) == null) {
             return false; //no invites given yet
@@ -66,6 +71,7 @@ public class InviteManager {
         }
     }
 
+    //Dogeveloper: Removes an invite from a player's invitelist. Accessed through /cancelinvite.
     public boolean deleteInvite(OfflinePlayer inviter, OfflinePlayer invitee) {
         if(PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId()) == null) {
             return false; //did not work
@@ -79,6 +85,8 @@ public class InviteManager {
         return true;
     }
 
+
+    //Dogeveloper: Shows who a player has invited to their home region. Accessed through /invitelist, and returns Optional.empty() if there is no data.
     public Optional<List<OfflinePlayer>> getInvites(OfflinePlayer inviter) {
         if(PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId()) == null || (PopulationDensity.instance.getConfig().getList("invites." + inviter.getUniqueId()).isEmpty())) {
             return Optional.empty();
