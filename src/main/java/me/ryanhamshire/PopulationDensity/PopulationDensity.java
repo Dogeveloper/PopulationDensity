@@ -24,6 +24,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.logging.Logger;
 
 import me.ryanhamshire.PopulationDensity.tabcompleters.InviteTabCompleter;
+import me.ryanhamshire.PopulationDensity.tabcompleters.SeenTabCompleter;
 import me.ryanhamshire.PopulationDensity.tabcompleters.VisitTabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -427,7 +428,9 @@ public class PopulationDensity extends JavaPlugin
 		PluginCommand visitCommand = this.getCommand("visit");
 		visitCommand.setTabCompleter(new VisitTabCompleter());
 		this.getCommand("invite").setTabCompleter(new InviteTabCompleter());
+		this.getCommand("seen").setTabCompleter(new SeenTabCompleter());
 		this.getCommand("cancelinvite").setTabCompleter(new InviteTabCompleter()); //Dogeveloper: both use the same tab completer.
+
 
 
 		//player events, to control spawn, respawn, disconnect, and region-based notifications as players walk around
@@ -894,6 +897,18 @@ public class PopulationDensity extends JavaPlugin
 			}
 			player.sendMessage(sb.toString());
 			return true;
+		}
+		else if (cmd.getName().equalsIgnoreCase("seen")) {
+			if(args.length < 1) return false;
+			OfflinePlayer oplr = getServer().getOfflinePlayer(args[0]);
+			if(oplr.hasPlayedBefore() || oplr.isOnline()) {
+				player.sendMessage(ChatColor.AQUA + "Player " + oplr.getName() + ((oplr.isOnline()) ? " is currently online." : " last played on " + new Date(oplr.getLastPlayed()).toString() + ".") + " He/she joined for the first time on " + new Date(oplr.getFirstPlayed()).toString() + ".");
+				return true;
+			}
+			else {
+				player.sendMessage(ChatColor.RED + args[0] + " has never played before.");
+				return true;
+			}
 		}
 		
 		else if(cmd.getName().equalsIgnoreCase("sendregion"))

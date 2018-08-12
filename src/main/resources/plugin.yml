@@ -57,6 +57,10 @@ commands:
       description: Shows who you have invited to your home region.
       usage: /invitelist
       aliases: [listinvites, invites]
+   seen:
+      description: See when a player has last played.
+      usage: /seen <player>
+      aliases: [seen, lastseen, firstjoined]
    visitlist:
       description: Shows who you can visit.
       usage: /visitlist
