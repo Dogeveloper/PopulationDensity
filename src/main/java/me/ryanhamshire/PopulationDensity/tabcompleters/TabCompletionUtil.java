@@ -1,6 +1,7 @@
 package me.ryanhamshire.PopulationDensity.tabcompleters;
 
 import me.ryanhamshire.PopulationDensity.PopulationDensity;
+import org.bukkit.Bukkit;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 
@@ -17,6 +18,20 @@ public class TabCompletionUtil {
         if(args.length > 0) {
             returnList.removeIf(name -> !name.toLowerCase().startsWith(PopulationDensity.join(args).toLowerCase()));
         }
+        /*
+        if(PopulationDensity.join(args).startsWith("TABCOMPLETESTRESSTEST")) {
+            //Dogeveloper: Tab complete stress test. to be removed in final version. for now we use the seed as it's a nice long number and adding to it doesn't take much compute power.
+            final int stressTestValue = 50; //multiplied by 3
+            Bukkit.getServer().getWorlds().forEach(world -> {
+                int counter = 0;
+                while(counter <= stressTestValue) {
+                    returnList.add(String.valueOf(world.getSeed() + counter));
+                    counter++;
+                }
+            });
+        }
+        */
+        Bukkit.getServer().getWorld("world").getSeed();
         returnList.sort(String.CASE_INSENSITIVE_ORDER);
         return returnList;
     }

@@ -237,7 +237,7 @@ public class ScanRegionTask extends Thread
 					//debugMaterials.forEach(m -> {
 						//Bukkit.getLogger().log(Level.WARNING, m.toString());
 					//});
-					PopulationDensity.instance.getLogger().log(Level.INFO, "PLAYER BLOCK " + material.toString());
+					//PopulationDensity.instance.getLogger().log(Level.INFO, "PLAYER BLOCK " + material.toString());
 					playerBlocks++;
 				}
 			}
