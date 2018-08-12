@@ -23,6 +23,8 @@ import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.logging.Logger;
 
+import me.ryanhamshire.PopulationDensity.tabcompleters.InviteTabCompleter;
+import me.ryanhamshire.PopulationDensity.tabcompleters.VisitTabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -423,7 +425,9 @@ public class PopulationDensity extends JavaPlugin
 		
 		//set up region name tab completers
 		PluginCommand visitCommand = this.getCommand("visit");
-		visitCommand.setTabCompleter(this.dataStore);
+		visitCommand.setTabCompleter(new VisitTabCompleter());
+		this.getCommand("invite").setTabCompleter(new InviteTabCompleter());
+		this.getCommand("cancelinvite").setTabCompleter(new InviteTabCompleter()); //Dogeveloper: both use the same tab completer.
 
 
 		//player events, to control spawn, respawn, disconnect, and region-based notifications as players walk around
@@ -702,11 +706,11 @@ public class PopulationDensity extends JavaPlugin
 			if(regionName == null)
 			{
 			    //mrc
-				player.sendMessage(ChatColor.YELLOW + "You're in a wilderness region (" + currentRegion.x + ", " + currentRegion.z + "). The closest region post to you is at " + mrcRegionPostLocation.getX() + " " + mrcRegionPostLocation.getY() + " " + mrcRegionPostLocation.getZ());
+				player.sendMessage(ChatColor.AQUA + "You're in a wilderness region (" + currentRegion.x + ", " + currentRegion.z + "). The closest region post to you is at " + mrcRegionPostLocation.getX() + " " + mrcRegionPostLocation.getY() + " " + mrcRegionPostLocation.getZ());
 			}
 			else
 			{
-				player.sendMessage(ChatColor.YELLOW + "You're in the " + regionName + " region (" + currentRegion.x + ", " + currentRegion.z + "). The closest region post to you is at " + mrcRegionPostLocation.getX() + " " + mrcRegionPostLocation.getY() + " " + mrcRegionPostLocation.getZ());
+				player.sendMessage(ChatColor.AQUA + "You're in the " + regionName + " region (" + currentRegion.x + ", " + currentRegion.z + "). The closest region post to you is at " + mrcRegionPostLocation.getX() + " " + mrcRegionPostLocation.getY() + " " + mrcRegionPostLocation.getZ());
 			}
 			
 			return true;
@@ -881,20 +885,15 @@ public class PopulationDensity extends JavaPlugin
 		}
 		else if (cmd.getName().equalsIgnoreCase("visitlist")) {
 			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "You may visit the following players: ");
-			if(InviteManager.instance().toHashMap().isPresent()) {
-				HashMap<OfflinePlayer, List<OfflinePlayer>> m = InviteManager.instance().toHashMap().get();
-				m.forEach((key, value) -> {
-					if(value.contains((Player) sender)) {
-						sb.append(key.getName()).append(" ");
-					}
-				});
-				player.sendMessage(sb.toString());
-				return true;
+			List<OfflinePlayer> visitList = InviteManager.instance().getVisitList(player);
+			if(visitList.isEmpty()) {
+				sb.append("none");
 			}
 			else {
-				player.sendMessage(ChatColor.RED + "No invites.");
-				return true;
+				visitList.forEach((host -> sb.append(host.getName())));
 			}
+			player.sendMessage(sb.toString());
+			return true;
 		}
 		
 		else if(cmd.getName().equalsIgnoreCase("sendregion"))
@@ -1151,7 +1150,7 @@ public class PopulationDensity extends JavaPlugin
         }
     }
 
-    private static String join(String[] args, int offset)
+    public static String join(String[] args, int offset)
     {
         StringBuilder builder = new StringBuilder();
         for(int i = offset; i < args.length; i++)
@@ -1162,7 +1161,7 @@ public class PopulationDensity extends JavaPlugin
         return builder.toString().trim();
     }
 	
-	private static String join(String[] args)
+	public static String join(String[] args)
 	{
         return join(args, 0);
     }

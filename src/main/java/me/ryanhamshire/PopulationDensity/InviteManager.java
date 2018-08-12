@@ -1,10 +1,13 @@
 package me.ryanhamshire.PopulationDensity;
 
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 //Dogeveloper: new InviteManager class to help manage invites.
 public class InviteManager {
@@ -40,7 +43,6 @@ public class InviteManager {
         PopulationDensity.instance.reloadConfig();
     }
 
-
     //Dogeveloper: Returns all data from InviteManager as a HashMap. Returns Optional.empty() if there is no data.
     public Optional<HashMap<OfflinePlayer, List<OfflinePlayer>>> toHashMap() {
         HashMap<OfflinePlayer, List<OfflinePlayer>> map = new HashMap<>();
@@ -56,6 +58,21 @@ public class InviteManager {
             map.put(Bukkit.getServer().getOfflinePlayer(UUID.fromString(key)), offlines);
         });
         return Optional.of(map);
+    }
+
+    public List<OfflinePlayer> getVisitList(OfflinePlayer invitee) {
+        List<OfflinePlayer> list = new ArrayList<>();
+        if(toHashMap().isPresent()) {
+            toHashMap().get().forEach((key, value) -> {
+                if(value.contains(invitee)) {
+                    list.add(key);
+                }
+            });
+            return list;
+        }
+        else {
+            return Collections.emptyList();
+        }
     }
 
     //Dogeveloper: Checks if a player is invited to a home region. Accessed through /visit.

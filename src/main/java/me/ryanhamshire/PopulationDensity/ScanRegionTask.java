@@ -132,10 +132,21 @@ public class ScanRegionTask extends Thread
 					material != Material.BIRCH_TRAPDOOR &&
 					material != Material.DARK_OAK_TRAPDOOR &&
 					material != Material.IRON_TRAPDOOR &&
+					material != Material.MUSHROOM_STEM &&
 					material != Material.JUNGLE_TRAPDOOR &&
+					material != Material.DANDELION &&
+					material != Material.LILAC &&
+					material != Material.BUBBLE_COLUMN &&
+					material != Material.KELP_PLANT &&
+					material != Material.PEONY &&
 					material != Material.OAK_TRAPDOOR &&
 					material != Material.SPRUCE_TRAPDOOR &&
-					material != Material.LADDER
+					material != Material.LADDER &&
+					material != Material.SEAGRASS &&
+					material != Material.TALL_SEAGRASS &&
+					material != Material.SEA_PICKLE &&
+
+					!material.toString().contains("CORAL") //Dogeveloper: TODO: Make this less lazy coding.
 					)
 			{
 				//if it's a valuable resource, count it
@@ -226,6 +237,7 @@ public class ScanRegionTask extends Thread
 					//debugMaterials.forEach(m -> {
 						//Bukkit.getLogger().log(Level.WARNING, m.toString());
 					//});
+					PopulationDensity.instance.getLogger().log(Level.INFO, "PLAYER BLOCK " + material.toString());
 					playerBlocks++;
 				}
 			}

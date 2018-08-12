@@ -66,7 +66,7 @@ public class DataStore implements TabCompleter
 	
 	//region data cache
 	private ConcurrentHashMap<String, RegionCoordinates> nameToCoordsMap = new ConcurrentHashMap<String, RegionCoordinates>();
-	private ConcurrentHashMap<RegionCoordinates, String> coordsToNameMap = new ConcurrentHashMap<RegionCoordinates, String>();
+	public ConcurrentHashMap<RegionCoordinates, String> coordsToNameMap = new ConcurrentHashMap<RegionCoordinates, String>();
 	
 	//initialization!
 	public DataStore(List<String> regionNames)

@@ -1,5 +1,6 @@
 package me.ryanhamshire.PopulationDensity;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -166,7 +167,11 @@ public class MonitorPerformanceTask implements Runnable
                     
                     //skip any entities with nameplates
                     if(entity.getCustomName() != null && entity.getCustomName() != "") continue;
-                    
+
+                    //Dogeveloper: If entity is in a vehicle, skip it.
+                    if(entity.getVehicle() != null) {
+                        return;
+                    }
                     //only specific types of animals may be removed
                     boolean isAnimal = entity instanceof Animals;
                     EntityType type = entity.getType();
