@@ -17,7 +17,6 @@ import java.util.logging.Level;
 //Dogeveloper: Tab completer for invite and cancelinvite command.
 public class InviteTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender cs, Command cmd, String label, String[] args) {
-        PopulationDensity.instance.getLogger().log(Level.INFO, "");
         if(!(cs instanceof Player)) { return Collections.emptyList();}
         Player plr = (Player) cs;
         List<String> returnList = new ArrayList<>();
