@@ -7,7 +7,7 @@ authors: [Steve, Mrawesomecookie]
 commands:
    visit:
       description: Teleports the player to a specified region.
-      usage: /visit <online player name> OR /visit <region name>
+      usage: /visit <player name> OR /visit <region name>
       aliases: [visitregion, vr, visitpost]
    homeregion:
       description: Returns the player to his/her home region.
