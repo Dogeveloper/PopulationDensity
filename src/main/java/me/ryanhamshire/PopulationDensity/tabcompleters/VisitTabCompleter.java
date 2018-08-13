@@ -31,7 +31,7 @@ public class VisitTabCompleter implements TabCompleter {
         //Dogeveloper: Add players living in public regions.
         //TODO: Make this more efficient.
         Arrays.asList(Bukkit.getServer().getOfflinePlayers()).forEach(plr2 -> {
-            if(PopulationDensity.instance.dataStore.getPlayerData(plr2).homeRegion != null) {
+            if(PopulationDensity.instance.dataStore.getRegionName(PopulationDensity.instance.dataStore.getPlayerData(plr2).homeRegion) != null) {
                 returnList.add(plr2.getName());
             }
         });
