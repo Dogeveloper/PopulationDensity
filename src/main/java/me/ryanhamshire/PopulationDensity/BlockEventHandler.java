@@ -145,13 +145,10 @@ public class BlockEventHandler implements Listener
 		
 		Location blockLocation = block.getLocation();
 		
-		//region posts are at sea level at the lowest, so no need to check build permissions under that
-		if(blockLocation.getBlockY() < PopulationDensity.instance.minimumRegionPostY) return;
-		
 		RegionCoordinates blockRegion = RegionCoordinates.fromLocation(blockLocation); 
 		
 		//if too close to (or above) region post, send an error message
-		if(!player.hasPermission("populationdensity.buildbreakanywhere") && this.nearRegionPost(blockLocation, blockRegion, PopulationDensity.instance.postProtectionRadius))
+		if(!player.hasPermission("populationdensity.buildbreakanywhere") && this.nearRegionPost(blockLocation, blockRegion, PopulationDensity.instance.postProtectionRadius) && (!(blockLocation.getBlockY() < PopulationDensity.instance.minimumRegionPostY)))
 		{
 			if(PopulationDensity.instance.buildRegionPosts)
 				PopulationDensity.sendMessage(player, TextMode.Err, Messages.NoBuildPost);
