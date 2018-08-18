@@ -3,6 +3,7 @@ package me.ryanhamshire.PopulationDensity.tabcompleters;
 import me.ryanhamshire.PopulationDensity.InviteManager;
 import me.ryanhamshire.PopulationDensity.PopulationDensity;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -21,20 +22,18 @@ public class InviteTabCompleter implements TabCompleter {
         Player plr = (Player) cs;
         List<String> returnList = new ArrayList<>();
         //Dogeveloper: Add offline players, except for those who are already invited.
-        Arrays.asList(Bukkit.getServer().getOfflinePlayers()).forEach(offlinePlayer -> {
+        Bukkit.getServer().getOnlinePlayers().forEach(offlinePlayer -> {
             if(cmd.getName().equalsIgnoreCase("invite") || cmd.getAliases().contains(cmd.getName())) {
                 if(!InviteManager.instance().canTravel(offlinePlayer, plr)) {
-                    returnList.add(offlinePlayer.getName());
-                }
-            }
-            if(cmd.getName().equalsIgnoreCase("cancelinvite") || cmd.getAliases().contains(cmd.getName())) {
-                if(InviteManager.instance().getInvites(plr).isPresent()) {
-                    if(InviteManager.instance().getInvites(plr).get().contains(offlinePlayer)) {
-                        returnList.add(offlinePlayer.getName());
-                    }
+                    returnList.add((offlinePlayer).getName());
                 }
             }
         });
+        if(cmd.getName().equalsIgnoreCase("cancelinvite") || cmd.getAliases().contains(cmd.getName())) {
+            if(InviteManager.instance().getInvites(plr).isPresent()) {
+                InviteManager.instance().getInvites(plr).get().forEach(plr2 -> returnList.add(plr2.getName()));
+            }
+        }
         return TabCompletionUtil.processTabCompletion(returnList, args);
     }
 }

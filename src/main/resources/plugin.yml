@@ -1,7 +1,7 @@
 name: PopulationDensity
 main: me.ryanhamshire.PopulationDensity.PopulationDensity
 softdepend: [Multiverse-Core, My Worlds, Transporter, MystCraft]
-version: 5.8.8b
+version: 5.8.8d
 api-version: 1.13
 authors: [Steve, Mrawesomecookie]
 commands:
@@ -61,6 +61,9 @@ commands:
       description: See when a player has last played.
       usage: /seen <player>
       aliases: [seen, lastseen, firstjoined]
+   players:
+      description: Shows a list of offline players.
+      usage: /players [page]
    visitlist:
       description: Shows who you can visit.
       usage: /visitlist

@@ -18,7 +18,7 @@ public class SeenTabCompleter implements TabCompleter {
         if(!(cs instanceof Player)) { return Collections.emptyList();}
         Player plr = (Player) cs;
         List<String> returnList = new ArrayList<String>();
-        Arrays.asList(Bukkit.getServer().getOfflinePlayers()).forEach((offlinePlayer -> returnList.add(offlinePlayer.getName())));
+        Bukkit.getServer().getOnlinePlayers().forEach((offlinePlayer -> returnList.add(offlinePlayer.getName())));
         return TabCompletionUtil.processTabCompletion(returnList, args);
     }
 }

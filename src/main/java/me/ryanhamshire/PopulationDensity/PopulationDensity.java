@@ -50,6 +50,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.ChatPaginator;
 import org.bukkit.util.Vector;
 
 public class PopulationDensity extends JavaPlugin
@@ -585,6 +586,77 @@ public class PopulationDensity extends JavaPlugin
 			reloadConfig();
 			player.sendMessage(ChatColor.GREEN + "Toggled visit messages to " + (getConfig().getBoolean("showvisits." + player.getUniqueId().toString()) ? "on" : "off") + ".");
 		}
+		if(cmd.getName().equalsIgnoreCase("players")) {
+			final OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+			try {
+				Bukkit.getScheduler().runTaskAsynchronously(PopulationDensity.instance, () -> {
+					int pageNumber = 1;
+					String sorter = null;
+					if (args.length == 1) {
+						try {
+							pageNumber = Integer.valueOf(args[0]); //use argument as page number.
+						} catch (NumberFormatException e) {
+							sorter = args[0]; //use argument as sorter if it isn't a number.
+						}
+					}
+					if (args.length > 1) {
+						List<String> arguments = new ArrayList<>(Arrays.asList(args));
+						StringBuilder stringBuilder = new StringBuilder();
+						try {
+							pageNumber = Integer.valueOf(arguments.get(arguments.size() - 1));
+							arguments.remove(arguments.get(arguments.size() - 1));
+						} catch (NumberFormatException e) {
+							//do nothing
+						}
+						arguments.forEach(argument -> {
+							if (arguments.get(arguments.size() - 1).equals(argument)) {
+								//do not add a space at the end
+								stringBuilder.append(argument);
+							} else {
+								stringBuilder.append(argument + " ");
+							}
+						});
+						sorter = stringBuilder.toString();
+					}
+					StringBuilder players = new StringBuilder();
+					List<String> offlinePlayersString = new ArrayList<String>();
+					for (OfflinePlayer p : offlinePlayers) {
+						offlinePlayersString.add(p.getName());
+						//players.append(ChatColor.GOLD + " " + p.getName() + ChatColor.YELLOW + "," + ChatColor.GOLD + " ");
+					}
+					Collections.sort(offlinePlayersString, String.CASE_INSENSITIVE_ORDER);
+					final String sorterString = sorter;
+					if (sorter != null) {
+						offlinePlayersString.removeIf(s -> !(s.toLowerCase().contains(sorterString.toLowerCase())));
+					}
+					for (String s : offlinePlayersString) {
+						if (offlinePlayersString.get(offlinePlayersString.size() - 1).equals(s)) {
+							players.append(ChatColor.GOLD + s);
+						} else {
+							players.append(ChatColor.GOLD + s + ChatColor.YELLOW + ", " + ChatColor.GOLD + " ");
+						}
+					}
+					ChatPaginator.ChatPage page = ChatPaginator.paginate(players.toString(), pageNumber);
+					if (pageNumber > page.getTotalPages()) {
+						pageNumber = page.getTotalPages();
+					}
+					StringBuilder heading = new StringBuilder();
+					heading.append(ChatColor.YELLOW).append("--------- ")
+							.append(ChatColor.WHITE).append("Offline Players: (" + pageNumber + "/" + page.getTotalPages() + ") out of " + offlinePlayers.length + " total")
+							.append(ChatColor.YELLOW).append(" --------");
+					((Player) sender).sendMessage(heading.toString());
+					if (sorterString != null) {
+						((Player) sender).sendMessage(ChatColor.YELLOW + "Search String: " + '"' + sorterString + '"');
+					}
+					((Player) sender).sendMessage(page.getLines());
+				});
+			}
+			catch(ConcurrentModificationException e) {
+				player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Sorry, you tried to read the player directory while the server was writing to it. Please try the command again, or report this issue if it still doesn't work.");
+			}
+
+			return true;
+		}
 		if(cmd.getName().equalsIgnoreCase("visit") && player != null)
 		{			
 		    if(args.length < 1) return false;
@@ -893,7 +965,7 @@ public class PopulationDensity extends JavaPlugin
 				sb.append("none");
 			}
 			else {
-				visitList.forEach((host -> sb.append(host.getName())));
+				visitList.forEach((host -> sb.append(host.getName() + " ")));
 			}
 			player.sendMessage(sb.toString());
 			return true;
