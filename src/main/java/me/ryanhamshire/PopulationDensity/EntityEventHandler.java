@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
@@ -342,7 +343,8 @@ public class EntityEventHandler implements Listener
 	    
 	    if(PopulationDensity.instance.isFallDamageImmune((Player)event.getEntity()))
         {
-            event.setCancelled(true);
+            PopulationDensity.instance.removeFallDamageImmunity(event.getEntity());
+			((Player) event.getEntity()).sendMessage(ChatColor.GOLD + "You can now take fall damage.");
         }
     }
 }

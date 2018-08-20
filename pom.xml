@@ -9,7 +9,7 @@
     </properties>
     <groupId>groupId</groupId>
     <artifactId>PopulationDensity</artifactId>
-    <version>5.8.8d</version>
+    <version>5.8.8e</version>
     <repositories>
         <repository>
             <id>spigot-repo</id>

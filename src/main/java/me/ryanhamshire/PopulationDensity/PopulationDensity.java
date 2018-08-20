@@ -584,7 +584,7 @@ public class PopulationDensity extends JavaPlugin
             }
 			saveConfig();
 			reloadConfig();
-			player.sendMessage(ChatColor.GREEN + "Toggled visit messages to " + (getConfig().getBoolean("showvisits." + player.getUniqueId().toString()) ? "on" : "off") + ".");
+			player.sendMessage(ChatColor.GREEN + "Toggled visit messages to " + ChatColor.YELLOW +  (getConfig().getBoolean("showvisits." + player.getUniqueId().toString()) ? "on" : "off") + ChatColor.GREEN + ".");
 		}
 		if(cmd.getName().equalsIgnoreCase("players")) {
 			final OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
@@ -958,6 +958,19 @@ public class PopulationDensity extends JavaPlugin
 				return true;
 			}
 		}
+		else if (cmd.getName().equalsIgnoreCase("togglelaunch")) {
+			if(getConfig().get("togglelaunch." + player.getUniqueId()) == null) {
+				getConfig().set("togglelaunch." + player.getUniqueId().toString(), false);
+			}
+			else {
+				getConfig().set("togglelaunch." + player.getUniqueId().toString(), !getConfig().getBoolean("togglelaunch." + player.getUniqueId()));
+			}
+			saveConfig();
+			reloadConfig();
+			player.sendMessage(ChatColor.GREEN + "Toggled region post launching to " + ChatColor.YELLOW +  (getConfig().getBoolean("togglelaunch." + player.getUniqueId().toString()) ? "on" : "off") + ChatColor.GREEN + ".");
+		    return true;
+		}
+
 		else if (cmd.getName().equalsIgnoreCase("visitlist")) {
 			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "You may visit the following players: ");
 			List<OfflinePlayer> visitList = InviteManager.instance().getVisitList(player);
@@ -1668,6 +1681,11 @@ public class PopulationDensity extends JavaPlugin
     
     boolean launchPlayer(Player player)
     {
+    	if(getConfig().get("togglelaunch." + player.getUniqueId()) != null) {
+			if(getConfig().get("togglelaunch." + player.getUniqueId()).equals(false)) {
+				return false;
+			}
+		}
         if(player.isFlying()) return false;
         if(!((Entity)player).isOnGround()) return false;
         this.makeEntityFallDamageImmune(player);

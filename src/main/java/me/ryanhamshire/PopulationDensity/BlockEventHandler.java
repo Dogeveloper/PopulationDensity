@@ -21,6 +21,7 @@ package me.ryanhamshire.PopulationDensity;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,6 +38,8 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityCreatePortalEvent;
+import org.bukkit.event.world.PortalCreateEvent;
 
 public class BlockEventHandler implements Listener 
 {
@@ -129,7 +132,26 @@ public class BlockEventHandler implements Listener
         
         lastLocation = from;
 	}
-	
+	@EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityPortalCreate(EntityCreatePortalEvent e) {
+	    if(e.getEntity().getLocation().equals(PopulationDensity.ManagedWorld)) {
+
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPortalCreate(PortalCreateEvent e) {
+		Bukkit.getServer().broadcastMessage("Portal creation detected.");
+        e.getBlocks().forEach(block -> {
+            if(block.getWorld().equals(PopulationDensity.ManagedWorld)) {
+                RegionCoordinates coords = RegionCoordinates.fromLocation(block.getLocation());
+                if(this.nearRegionPost(block.getLocation(), coords, PopulationDensity.instance.postProtectionRadius)) {
+					Bukkit.getServer().broadcastMessage("Portal creation stopped at " + block.getLocation().toString());
+                    e.setCancelled(true);
+                }
+            }
+        });
+    }
 	//when a player places a block
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onBlockPlace(BlockPlaceEvent placeEvent)
