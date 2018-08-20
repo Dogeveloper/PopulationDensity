@@ -970,6 +970,18 @@ public class PopulationDensity extends JavaPlugin
 			player.sendMessage(ChatColor.GREEN + "Toggled region post launching to " + ChatColor.YELLOW +  (getConfig().getBoolean("togglelaunch." + player.getUniqueId().toString()) ? "on" : "off") + ChatColor.GREEN + ".");
 		    return true;
 		}
+		else if (cmd.getName().equalsIgnoreCase("gtogglelaunch")) {
+			if(getConfig().get("gtogglelaunch") == null) {
+				getConfig().set("gtogglelaunch", false);
+			}
+			else {
+				getConfig().set("gtogglelaunch", !getConfig().getBoolean("gtogglelaunch"));
+			}
+			saveConfig();
+			reloadConfig();
+			player.sendMessage(ChatColor.GREEN + "Toggled GLOBAL region post launching to " + ChatColor.YELLOW +  (getConfig().getBoolean("gtogglelaunch") ? "on" : "off") + ChatColor.GREEN + ".");
+			return true;
+		}
 
 		else if (cmd.getName().equalsIgnoreCase("visitlist")) {
 			StringBuilder sb = new StringBuilder(ChatColor.AQUA + "You may visit the following players: ");
@@ -1681,21 +1693,36 @@ public class PopulationDensity extends JavaPlugin
     
     boolean launchPlayer(Player player)
     {
-    	if(getConfig().get("togglelaunch." + player.getUniqueId()) != null) {
-			if(getConfig().get("togglelaunch." + player.getUniqueId()).equals(false)) {
-				return false;
+    	boolean shouldWeLaunch = true;
+    	//if there's a global launch setting, apply that first.
+		if(getConfig().get("gtogglelaunch") != null) {
+			if(getConfig().get("gtogglelaunch").equals(false)) {
+				shouldWeLaunch = false;
 			}
 		}
-        if(player.isFlying()) return false;
-        if(!((Entity)player).isOnGround()) return false;
-        this.makeEntityFallDamageImmune(player);
-        Location newViewAngle = player.getLocation();
-        newViewAngle.setPitch(90);
-        player.teleport(newViewAngle);
-        player.setVelocity(new Vector(0, 50, 0));
-        player.playSound(player.getEyeLocation(), Sound.ENTITY_GHAST_SHOOT, .75f, 1f);
-        player.setGliding(false);
-        return true;
+    	if(getConfig().get("togglelaunch." + player.getUniqueId()) != null) {
+			if(getConfig().get("togglelaunch." + player.getUniqueId()).equals(false)) {
+				shouldWeLaunch = false;
+			}
+			else {
+				shouldWeLaunch = true;
+			}
+		}
+		if(shouldWeLaunch) {
+			if (player.isFlying()) return false;
+			if (!((Entity) player).isOnGround()) return false;
+			this.makeEntityFallDamageImmune(player);
+			Location newViewAngle = player.getLocation();
+			newViewAngle.setPitch(90);
+			player.teleport(newViewAngle);
+			player.setVelocity(new Vector(0, 50, 0));
+			player.playSound(player.getEyeLocation(), Sound.ENTITY_GHAST_SHOOT, .75f, 1f);
+			player.setGliding(false);
+			return true;
+		}
+		else {
+			return false;
+		}
     }
 
 

@@ -141,12 +141,10 @@ public class BlockEventHandler implements Listener
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPortalCreate(PortalCreateEvent e) {
-		Bukkit.getServer().broadcastMessage("Portal creation detected.");
         e.getBlocks().forEach(block -> {
             if(block.getWorld().equals(PopulationDensity.ManagedWorld)) {
                 RegionCoordinates coords = RegionCoordinates.fromLocation(block.getLocation());
                 if(this.nearRegionPost(block.getLocation(), coords, PopulationDensity.instance.postProtectionRadius)) {
-					Bukkit.getServer().broadcastMessage("Portal creation stopped at " + block.getLocation().toString());
                     e.setCancelled(true);
                 }
             }

@@ -1,7 +1,7 @@
 name: PopulationDensity
 main: me.ryanhamshire.PopulationDensity.PopulationDensity
 softdepend: [Multiverse-Core, My Worlds, Transporter, MystCraft]
-version: 5.8.8e
+version: 5.8.9
 api-version: 1.13
 authors: [Steve, Mrawesomecookie]
 commands:
@@ -16,6 +16,9 @@ commands:
    togglelaunch:
       description: Toggles if you are launched.
       usage: /togglelaunch
+   gtogglelaunch:
+      description: Globally toggle launch.
+      permission: populationdensity.gtogglelaunch
    sethomeregion:
       description: Updates a user's home region to his current region.
       usage: /SetHomeRegion
@@ -136,6 +139,9 @@ permissions:
         default: op
     populationdensity.adminlogin:
         description: Grants a player permission to fill a player slot reserved for administrators.
+        default: op
+    populationdensity.gtoggleflight:
+        description: Grants a player permission to toggle player launching for all players.
         default: op
     populationdensity.prioritylogin:
         description: Raises a player's login priority level to 25 of 100.
