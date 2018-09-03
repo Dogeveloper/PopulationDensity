@@ -14,9 +14,14 @@ import java.util.logging.Level;
 //Dogeveloper: simple class to help with handling tab completion
 public class TabCompletionUtil {
     protected static List<String> processTabCompletion(List<String> items, String[] args) {
+        PopulationDensity.instance.getLogger().log(Level.WARNING, "Is items null? " + (items == null));
+        PopulationDensity.instance.getLogger().log(Level.WARNING, "Is argus null? " + (args == null));
         List<String> returnList = new ArrayList<>(items);
         if(args.length > 0) {
-            returnList.removeIf(name -> !name.toLowerCase().startsWith(PopulationDensity.join(args).toLowerCase()));
+            returnList.removeIf(name -> {
+                PopulationDensity.instance.getLogger().log(Level.WARNING, "IS NAME NULL? " + (name == null));
+                return !name.toLowerCase().startsWith(PopulationDensity.join(args).toLowerCase());
+            });
         }
         /*
         if(PopulationDensity.join(args).startsWith("TABCOMPLETESTRESSTEST")) {

@@ -21,11 +21,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 //teleports a player.  useful as scheduled task so that a joining player may be teleported (otherwise error)
 class TeleportPlayerTask implements Runnable 
@@ -93,7 +96,13 @@ class TeleportPlayerTask implements Runnable
 		        }
 		    }
 		}
-		
+		//DOGEVELOPER: integer for how long the resistance should last. 300 ticks = 15 seconds.
+		final int resistanceEffectTime = 300;
+		//DOGEVELOPER: Add ten seconds of resistance, to prevent bugs where players are killed by accident.
+        //if a player already has resistance, add that time on.
+        final int timeBooster = (player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) == null) ? 0 : player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE).getDuration();
+        player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5, resistanceEffectTime + timeBooster));
 		player.teleport(destination, TeleportCause.PLUGIN);
 		if(this.makeFallDamageImmune)
 		{
